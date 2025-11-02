@@ -1,35 +1,46 @@
-
+# Nama Workflow Anda
 name: Automatic Preprocessing
 
+# Kapan workflow ini berjalan?
+# Setiap kali ada 'push' (upload) ke branch 'main'
 on:
   push:
     branches: [ "main", "master" ]
 
+# Pekerjaan yang harus dilakukan
 jobs:
   run-preprocessing:
+    # Menggunakan server Ubuntu
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Mengunduh kode Anda dari GitHub ke server
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # 2. Menginstall Python di server
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
+      # 3. Menginstall "Daftar Belanjaan" (requirements.txt)
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Pastikan nama file ini SAMA PERSIS dengan file Anda
+      # 4. MENJALANKAN SKRIP ANDA
+      # (Path ini sudah benar karena kita menjalankannya dari folder utama)
       - name: Run Preprocessing Script
         run: |
-          python Eksperimen_SML_MRIZQY-PUTRA-P/preprocessing/automate_MRIZQY-PUTRA-P.py
+          python preprocessing/automate_NamaAnda.py
 
+      # 5. MENYIMPAN HASILNYA KEMBALI KE GITHUB
+      # (Otomatis commit file baru yang ada di folder output)
       - name: Commit and Push Preprocessed Data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "ADVANCE: Preprocessing data completed"
+          # Path ke file output Anda
           file_pattern: preprocessing/namadataset_preprocessing/*.csv
